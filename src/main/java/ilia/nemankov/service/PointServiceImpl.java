@@ -7,6 +7,9 @@ import ilia.nemankov.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PointServiceImpl implements PointService {
 
@@ -15,6 +18,17 @@ public class PointServiceImpl implements PointService {
 
     @Autowired
     private PointRepository pointRepository;
+
+    @Override
+    public List<PointDTO> getPoints() {
+        //TODO find by real user id
+        List<Point> entities = pointRepository.findByUserId(1);
+        List<PointDTO> dtos = new ArrayList<>();
+        for (Point entity : entities) {
+            dtos.add(pointMapper.entityToDTO(entity));
+        }
+        return dtos;
+    }
 
     @Override
     public PointDTO addPoint(PointDTO point) {

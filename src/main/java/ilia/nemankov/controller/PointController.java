@@ -5,13 +5,21 @@ import ilia.nemankov.service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@RequestMapping(path = "/point")
 public class PointController {
 
     @Autowired
     private PointService pointService;
 
-    @PostMapping(path = "/point")
+    @GetMapping()
+    public List<PointDTO> getPoints() {
+        return pointService.getPoints();
+    }
+
+    @PostMapping()
     public PointDTO addPoint(@RequestBody PointDTO point) {
         return pointService.addPoint(point);
     }
