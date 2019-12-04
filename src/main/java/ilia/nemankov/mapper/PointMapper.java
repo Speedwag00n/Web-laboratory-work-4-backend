@@ -13,9 +13,6 @@ public class PointMapper {
         entity.setX(dto.getX());
         entity.setY(dto.getY());
         entity.setR(dto.getR());
-        ///TODO calculate hit and userId
-        entity.setUserId(1);
-        entity.setHit(false);
 
         return entity;
     }

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface PointService {
 
-    List<PointDTO> getPoints();
+    List<PointDTO> getPoints(String tokenHeader);
 
-    PointDTO addPoint(PointDTO point);
+    PointDTO addPoint(PointDTO point, String tokenHeader);
 
 }

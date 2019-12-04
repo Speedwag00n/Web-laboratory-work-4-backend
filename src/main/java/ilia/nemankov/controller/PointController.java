@@ -15,13 +15,13 @@ public class PointController {
     private PointService pointService;
 
     @GetMapping()
-    public List<PointDTO> getPoints() {
-        return pointService.getPoints();
+    public List<PointDTO> getPoints(@RequestHeader(value = "Authorization") String tokenHeader) {
+        return pointService.getPoints(tokenHeader);
     }
 
     @PostMapping()
-    public PointDTO addPoint(@RequestBody PointDTO point) {
-        return pointService.addPoint(point);
+    public PointDTO addPoint(@RequestBody PointDTO point, @RequestHeader(value = "Authorization") String tokenHeader) {
+        return pointService.addPoint(point, tokenHeader);
     }
 
 }
