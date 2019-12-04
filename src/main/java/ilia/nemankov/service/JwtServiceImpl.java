@@ -24,7 +24,7 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private JwtUtil jwtTokenUtil;
+    private JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -44,7 +44,7 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
             UserDetails userDetails = loadUserByUsername(user.getLogin());
-            String token = jwtTokenUtil.generateToken(userDetails);
+            String token = jwtUtil.generateToken(userDetails);
             return token;
         } catch (DisabledException e) {
             throw e;
