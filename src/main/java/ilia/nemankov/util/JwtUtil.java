@@ -29,6 +29,10 @@ public class JwtUtil {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
+    public Date getIssueDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
+    }
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -36,6 +40,16 @@ public class JwtUtil {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    }
+
+    public String getTokenFromHeader(String header) {
+        String jwtToken = null;
+        if (header != null && header.startsWith("Bearer ")) {
+            jwtToken = header.substring(7);
+        } else {
+
+        }
+        return jwtToken;
     }
 
     private Boolean isTokenExpired(String token) {
@@ -54,8 +68,11 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails, Date lastLogout) {
         final String username = getUsernameFromToken(token);
+        if (getIssueDateFromToken(token).before(lastLogout)) {
+            return false;
+        }
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

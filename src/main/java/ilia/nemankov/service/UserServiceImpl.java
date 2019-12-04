@@ -7,6 +7,8 @@ import ilia.nemankov.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public long addUser(UserDTO user) {
         User entity = userMapper.dtoToEntity(user);
+        Date registrationTime = new Date();
+        entity.setLastLogout(registrationTime);
         long userId = userRepository.save(entity).getId();
         return userId;
     }

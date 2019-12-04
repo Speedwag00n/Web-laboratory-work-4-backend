@@ -36,9 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/user").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
-                //TODO require auth
+
                 .antMatchers(HttpMethod.GET, "/point").authenticated()
                 .antMatchers(HttpMethod.POST, "/point").authenticated()
+                .antMatchers(HttpMethod.POST, "/logout").authenticated()
 
                 .anyRequest().authenticated()
                 .and()

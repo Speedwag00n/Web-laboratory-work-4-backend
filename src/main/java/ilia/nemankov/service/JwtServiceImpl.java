@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
     }
 
     @Override
-    public String authenticate(UserDTO user) {
+    public String login(UserDTO user) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
             UserDetails userDetails = loadUserByUsername(user.getLogin());
@@ -51,6 +52,22 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
         } catch (BadCredentialsException e) {
             throw e;
         }
+    }
+
+    @Override
+    public void logout(String login) {
+        User entity = userRepository.findByLogin(login);
+
+        Date lastLogout = new Date();
+        entity.setLastLogout(lastLogout);
+
+        userRepository.save(entity);
+    }
+
+    @Override
+    public Date loadLastLogout(String login) {
+        User entity = userRepository.findByLogin(login);
+        return entity.getLastLogout();
     }
 
 }

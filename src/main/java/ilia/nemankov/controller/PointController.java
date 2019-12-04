@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/point")
+@RequestMapping(path = "/api/point")
 public class PointController {
 
     @Autowired
