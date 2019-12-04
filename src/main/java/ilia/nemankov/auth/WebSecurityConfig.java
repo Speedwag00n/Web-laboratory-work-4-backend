@@ -39,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.GET, "/api/point").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/point").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/current_points").authenticated()
                 .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
 
                 .anyRequest().authenticated()

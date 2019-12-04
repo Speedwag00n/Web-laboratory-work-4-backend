@@ -10,4 +10,6 @@ public interface PointService {
 
     PointDTO addPoint(PointDTO point, String tokenHeader);
 
+    List<PointDTO> recalculateHit(double currentRadius, String tokenHeader);
+
 }

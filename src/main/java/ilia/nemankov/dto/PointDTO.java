@@ -12,5 +12,6 @@ public class PointDTO {
     private double y;
     private double r;
     private boolean hit;
+    private boolean hitNow;
 
 }

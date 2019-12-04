@@ -27,10 +27,14 @@ public class PointServiceImpl implements PointService {
     public List<PointDTO> getPoints(String tokenHeader) {
         String token = jwtUtil.getTokenFromHeader(tokenHeader);
         List<Point> entities = pointRepository.findByUserId(Integer.parseInt(jwtUtil.getUserIdFromToken(token)));
+
         List<PointDTO> dtos = new ArrayList<>();
         for (Point entity : entities) {
-            dtos.add(pointMapper.entityToDTO(entity));
+            PointDTO dto = pointMapper.entityToDTO(entity);
+            dto.setHitNow(dto.isHit());
+            dtos.add(dto);
         }
+
         return dtos;
     }
 
@@ -39,8 +43,29 @@ public class PointServiceImpl implements PointService {
         Point entity = pointMapper.dtoToEntity(point);
         String token = jwtUtil.getTokenFromHeader(tokenHeader);
         entity.setUserId(Integer.parseInt(jwtUtil.getUserIdFromToken(token)));
+
+        entity.setHit(isHit(entity.getX(), entity.getY(), entity.getR()));
+
         Point savedEntity = pointRepository.save(entity);
-        return pointMapper.entityToDTO(savedEntity);
+
+        PointDTO dto = pointMapper.entityToDTO(savedEntity);
+        dto.setHitNow(dto.isHit());
+        return dto;
+    }
+
+    @Override
+    public List<PointDTO> recalculateHit(double currentRadius, String tokenHeader) {
+        List<PointDTO> dtos = getPoints(tokenHeader);
+        for (PointDTO dto : dtos) {
+            dto.setHitNow(isHit(dto.getX(), dto.getY(), currentRadius));
+        }
+        return dtos;
+    }
+
+    private boolean isHit(double x, double y, double r) {
+        return ((x >= 0) && (y >= 0) && (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2)))
+                || ((x <= 0) && (y >= 0) && (y <= 2 * x + r))
+                || ((x <= 0) && (y <= 0) && (-(r / 2) <= x) && (-r <= y));
     }
 
 }
