@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,5 +22,9 @@ public class User {
     private String password;
 
     private Date lastLogout;
+
+    @OneToMany
+    @JoinColumn(name = "id")
+    List<Point> answers;
 
 }

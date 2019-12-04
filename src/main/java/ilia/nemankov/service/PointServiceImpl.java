@@ -4,6 +4,7 @@ import ilia.nemankov.dto.PointDTO;
 import ilia.nemankov.mapper.PointMapper;
 import ilia.nemankov.model.Point;
 import ilia.nemankov.repository.PointRepository;
+import ilia.nemankov.repository.UserRepository;
 import ilia.nemankov.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,15 @@ public class PointServiceImpl implements PointService {
     private PointRepository pointRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Override
     public List<PointDTO> getPoints(String tokenHeader) {
         String token = jwtUtil.getTokenFromHeader(tokenHeader);
-        List<Point> entities = pointRepository.findByUserId(Integer.parseInt(jwtUtil.getUserIdFromToken(token)));
+        List<Point> entities = pointRepository.findByUserId(Long.parseLong(jwtUtil.getUserIdFromToken(token)));
 
         List<PointDTO> dtos = new ArrayList<>();
         for (Point entity : entities) {
@@ -42,10 +46,9 @@ public class PointServiceImpl implements PointService {
     public PointDTO addPoint(PointDTO point, String tokenHeader) {
         Point entity = pointMapper.dtoToEntity(point);
         String token = jwtUtil.getTokenFromHeader(tokenHeader);
-        entity.setUserId(Integer.parseInt(jwtUtil.getUserIdFromToken(token)));
+        entity.setUser(userRepository.findById(Long.parseLong(jwtUtil.getUserIdFromToken(token))));
 
         entity.setHit(isHit(entity.getX(), entity.getY(), entity.getR()));
-
         Point savedEntity = pointRepository.save(entity);
 
         PointDTO dto = pointMapper.entityToDTO(savedEntity);
