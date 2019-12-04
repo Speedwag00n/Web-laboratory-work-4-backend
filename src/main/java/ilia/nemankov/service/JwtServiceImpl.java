@@ -42,10 +42,16 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
 
     @Override
     public String login(UserDTO user) {
+        long id = userRepository.findByLogin(user.getLogin()).getId();
+        return login(user, id);
+    }
+
+    @Override
+    public String login(UserDTO user, long id) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
             UserDetails userDetails = loadUserByUsername(user.getLogin());
-            String token = jwtUtil.generateToken(userDetails);
+            String token = jwtUtil.generateToken(userDetails, id);
             return token;
         } catch (DisabledException e) {
             throw e;

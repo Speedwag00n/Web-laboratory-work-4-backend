@@ -1,6 +1,7 @@
 package ilia.nemankov.controller;
 
 import ilia.nemankov.dto.UserDTO;
+import ilia.nemankov.service.JwtService;
 import ilia.nemankov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping()
     public ResponseEntity<String> register(@RequestBody UserDTO dto) {
         long id = userService.addUser(dto);
-        //TODO return token
-        return new ResponseEntity<>(id + "", HttpStatus.OK);
+        String token = jwtService.login(dto, id);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
 }

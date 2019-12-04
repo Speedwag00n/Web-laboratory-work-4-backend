@@ -34,12 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.POST, "/user").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/user").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/point").authenticated()
-                .antMatchers(HttpMethod.POST, "/point").authenticated()
-                .antMatchers(HttpMethod.POST, "/logout").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/point").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/point").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/logout").authenticated()
 
                 .anyRequest().authenticated()
                 .and()

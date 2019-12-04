@@ -12,6 +12,8 @@ public interface JwtService {
 
     String login(UserDTO user);
 
+    String login(UserDTO user, long id);
+
     void logout(String login);
 
     Date loadLastLogout(String login);

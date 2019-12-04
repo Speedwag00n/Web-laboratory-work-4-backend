@@ -33,6 +33,10 @@ public class JwtUtil {
         return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
+    public String getUserIdFromToken(String token) {
+        return getClaimFromToken(token, Claims::getId);
+    }
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -57,14 +61,15 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, long id) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, userDetails.getUsername(), id);
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, long id) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + lifetime * 60 * 60 * 1000))
+                .setId(id + "")
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
