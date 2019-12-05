@@ -6,6 +6,7 @@ import ilia.nemankov.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO dto) {
+    public ResponseEntity<String> login(@Validated @RequestBody UserDTO dto) {
         String token = jwtService.login(dto);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }

@@ -20,7 +20,6 @@ public class PointMapper {
     public PointDTO entityToDTO(Point entity) {
         PointDTO dto =  new PointDTO();
 
-        dto.setId(entity.getId());
         dto.setX(entity.getX());
         dto.setY(entity.getY());
         dto.setR(entity.getR());
