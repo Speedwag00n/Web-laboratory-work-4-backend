@@ -28,14 +28,14 @@ public class PointServiceImpl implements PointService {
     private JwtUtil jwtUtil;
 
     @Override
-    public List<PointDTO> getPoints(String tokenHeader) {
+    public List<PointDTO> getPoints(double currentRadius, String tokenHeader) {
         String token = jwtUtil.getTokenFromHeader(tokenHeader);
         List<Point> entities = pointRepository.findByUserId(Long.parseLong(jwtUtil.getUserIdFromToken(token)));
 
         List<PointDTO> dtos = new ArrayList<>();
         for (Point entity : entities) {
             PointDTO dto = pointMapper.entityToDTO(entity);
-            dto.setHitNow(dto.isHit());
+            dto.setHitNow(isHit(dto.getX(), dto.getY(), currentRadius));
             dtos.add(dto);
         }
 
@@ -54,15 +54,6 @@ public class PointServiceImpl implements PointService {
         PointDTO dto = pointMapper.entityToDTO(savedEntity);
         dto.setHitNow(dto.isHit());
         return dto;
-    }
-
-    @Override
-    public List<PointDTO> recalculateHit(double currentRadius, String tokenHeader) {
-        List<PointDTO> dtos = getPoints(tokenHeader);
-        for (PointDTO dto : dtos) {
-            dto.setHitNow(isHit(dto.getX(), dto.getY(), currentRadius));
-        }
-        return dtos;
     }
 
     private boolean isHit(double x, double y, double r) {

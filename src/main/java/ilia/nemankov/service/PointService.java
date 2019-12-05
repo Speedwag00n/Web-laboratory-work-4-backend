@@ -6,10 +6,8 @@ import java.util.List;
 
 public interface PointService {
 
-    List<PointDTO> getPoints(String tokenHeader);
+    List<PointDTO> getPoints(double currentRadius, String tokenHeader);
 
     PointDTO addPoint(PointDTO point, String tokenHeader);
-
-    List<PointDTO> recalculateHit(double currentRadius, String tokenHeader);
 
 }

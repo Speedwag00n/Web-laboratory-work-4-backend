@@ -15,13 +15,8 @@ public class PointController {
     private PointService pointService;
 
     @GetMapping(path = "/point")
-    public List<PointDTO> getPoints(@RequestHeader(value = "Authorization") String tokenHeader) {
-        return pointService.getPoints(tokenHeader);
-    }
-
-    @GetMapping(path = "/current_points")
-    public List<PointDTO> recalculateHit(@RequestParam(value = "r", required = false) double currentRadius, @RequestHeader(value = "Authorization") String tokenHeader) {
-        return pointService.recalculateHit(currentRadius, tokenHeader);
+    public List<PointDTO> getPoints(@RequestParam(value = "r", required = false) double currentRadius, @RequestHeader(value = "Authorization") String tokenHeader) {
+        return pointService.getPoints(currentRadius, tokenHeader);
     }
 
     @PostMapping(path = "/point")
