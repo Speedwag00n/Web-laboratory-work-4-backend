@@ -3,6 +3,7 @@ package ilia.nemankov.controller;
 import ilia.nemankov.dto.UserDTO;
 import ilia.nemankov.service.JwtService;
 import ilia.nemankov.service.UserService;
+import ilia.nemankov.service.exception.LoginInUseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,13 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<String> register(@Validated @RequestBody UserDTO dto) {
-        long id = userService.addUser(dto);
-        String token = jwtService.login(dto, id);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        try {
+            long id = userService.addUser(dto);
+            String token = jwtService.login(dto, id);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+        } catch (LoginInUseException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

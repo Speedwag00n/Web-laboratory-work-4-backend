@@ -14,11 +14,11 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private double x;
+    private int x;
 
     private double y;
 
-    private double r;
+    private int r;
 
     private boolean hit;
 

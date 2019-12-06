@@ -38,7 +38,7 @@ public class JwtUtil {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
+        Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
@@ -57,28 +57,25 @@ public class JwtUtil {
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
+        Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails, long id) {
+    public String generateToken(String login, long id) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername(), id);
-    }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject, long id) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().setClaims(claims).setSubject(login).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + lifetime * 60 * 60 * 1000))
                 .setId(id + "")
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails, Date lastLogout) {
-        final String username = getUsernameFromToken(token);
+        String username = getUsernameFromToken(token);
         if (getIssueDateFromToken(token).before(lastLogout)) {
             return false;
         }
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername())  && !isTokenExpired(token));
     }
 
 }

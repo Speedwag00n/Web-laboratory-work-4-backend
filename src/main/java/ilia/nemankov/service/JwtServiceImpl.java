@@ -42,22 +42,21 @@ public class JwtServiceImpl implements UserDetailsService, JwtService {
 
     @Override
     public String login(UserDTO user) {
-        long id = userRepository.findByLogin(user.getLogin()).getId();
-        return login(user, id);
+        User entity = userRepository.findByLogin(user.getLogin());
+        if (entity != null) {
+            long id = entity.getId();
+            return login(user, id);
+        } else {
+            throw new BadCredentialsException("Bad login");
+        }
     }
 
     @Override
     public String login(UserDTO user, long id) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
-            UserDetails userDetails = loadUserByUsername(user.getLogin());
-            String token = jwtUtil.generateToken(userDetails, id);
-            return token;
-        } catch (DisabledException e) {
-            throw e;
-        } catch (BadCredentialsException e) {
-            throw e;
-        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
+        UserDetails userDetails = loadUserByUsername(user.getLogin());
+        String token = jwtUtil.generateToken(userDetails.getUsername(), id);
+        return token;
     }
 
     @Override

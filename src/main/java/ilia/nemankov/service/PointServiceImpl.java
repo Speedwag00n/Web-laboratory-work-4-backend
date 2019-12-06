@@ -52,7 +52,7 @@ public class PointServiceImpl implements PointService {
         Point savedEntity = pointRepository.save(entity);
 
         PointDTO dto = pointMapper.entityToDTO(savedEntity);
-        dto.setHitNow(dto.isHit());
+        dto.setHitNow(dto.getHit());
         return dto;
     }
 
