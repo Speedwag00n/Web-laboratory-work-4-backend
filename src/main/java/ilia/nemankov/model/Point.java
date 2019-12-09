@@ -14,7 +14,7 @@ public class Point {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int x;
+    private double x;
 
     private double y;
 
@@ -22,8 +22,8 @@ public class Point {
 
     private boolean hit;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }

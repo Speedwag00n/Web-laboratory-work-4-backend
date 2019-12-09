@@ -23,8 +23,7 @@ public class User {
 
     private Date lastLogout;
 
-    @OneToMany
-    @JoinColumn(name = "id")
-    List<Point> answers;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Point> points;
 
 }

@@ -3,28 +3,28 @@ package ilia.nemankov.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
-public class PointDTO {
+public class PointDTO implements Serializable {
+
+    private static final long serialVersionUID = 3901366814622766639L;
 
     @NotNull
     @Max(3)
     @Min(-5)
-    private Integer x;
+    private Double x;
 
     @NotNull
-    @Max(5)
-    @Min(-5)
+    @DecimalMax(value = "5", inclusive = false)
+    @DecimalMin(value = "-5", inclusive = false)
     private Double y;
 
     @NotNull
-    @Max(5)
-    @Min(-3)
+    @Max(3)
+    @Min(1)
     private Integer r;
 
     @Null
