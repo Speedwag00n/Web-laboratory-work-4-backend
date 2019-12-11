@@ -22,7 +22,7 @@ public class PointController {
     private PointService pointService;
 
     @GetMapping(path = "/point")
-    public List<PointDTO> getPoints(@RequestParam(value = "r") @Max(5) @Min(-3) double currentRadius, @RequestHeader(value = "Authorization") String tokenHeader) {
+    public List<PointDTO> getPoints(@RequestParam(value = "r") @Max(3) @Min(1) double currentRadius, @RequestHeader(value = "Authorization") String tokenHeader) {
         return pointService.getPoints(currentRadius, tokenHeader);
     }
 
